@@ -1,5 +1,21 @@
+let log
+let logs = []
+const columns = [
+  'iteration',
+  'collectionName',
+  'requestName',
+  'method',
+  'url',
+  'status',
+  'code',
+  'responseTime',
+  'responseSize',
+  'executed',
+  'failed'
+]
+
 /**
- * Reporter that simply dumps the summary object to file (default: newman-run-report.csv).
+ * Reporter that outputs basic logs to CSV (default: newman-run-report.csv).
  *
  * @param {Object} newman - The collection run object, with event hooks for reporting run details.
  * @param {Object} options - A set of collection run options.
@@ -7,59 +23,75 @@
  * @returns {*}
  */
 module.exports = function newmanCSVReporter (newman, options) {
-  let i = 1
-  let results = ['Collection Name, Request Name, Method, URL, Status, Code, Response Time (ms), Response Size (B), Executed, Failed']
-
-  newman.on('beforeRequest', (err, o) => {
-    if (err) return
-    const { item, request } = 0
-
-    results[i] = []
-    results[i][0] = newman.summary.collection.name
-    results[i][1] = item.name
-    results[i][2] = request.method
-    results[i][3] = request.url.toString()
-  })
-
-  newman.on('request', (err, o) => {
-    if (err) return
-    const { response } = o
-
-    results[i][4] = response.status
-    results[i][5] = response.code
-    results[i][6] = response.responseTime
-    results[i][7] = response.responseSize
-  })
-
-  newman.on('assertion', (err, o) => {
-    const key = err ? 9 : 8
-    const firstAssertion = !results[i][key]
-    const { assertion } = o
-
-    if (firstAssertion) {
-      results[i][key] = assertion
-    } else {
-      results[i][key] += ` :: ${assertion}`
-    }
-  })
-
-  newman.on('item', (err, o) => {
+  newman.on('beforeItem', (err, e) => {
     if (err) return
 
-    results[i] = results[i].join(', ')
-    i++
+    log = {}
   })
 
-  newman.on('beforeDone', (err, o) => {
-    if (err) { return }
+  newman.on('beforeRequest', (err, e) => {
+    if (err) return
+    const { cursor, item, request } = e
+
+    Object.assign(log, {
+      collectionName: newman.summary.collection.name,
+      iteration: cursor.iteration + 1,
+      requestName: item.name,
+      method: request.method,
+      url: request.url.toString()
+    })
+  })
+
+  newman.on('request', (err, e) => {
+    if (err) return
+    const { status, code, responseTime, responseSize } = e.response
+    Object.assign(log, { status, code, responseTime, responseSize })
+  })
+
+  newman.on('assertion', (err, e) => {
+    const { assertion } = e
+    const key = err ? 'failed' : 'executed'
+
+    log[key] = log[key] || []
+    log[key].push(assertion)
+  })
+
+  newman.on('item', (err, e) => {
+    if (err) return
+
+    logs.push(log)
+  })
+
+  newman.on('beforeDone', (err, e) => {
+    if (err) return
 
     newman.exports.push({
       name: 'csv-reporter',
       default: 'newman-run-report.csv',
       path: options.export,
-      content: results.join('\n')
+      content: getResults()
     })
 
     console.log('CSV write complete!')
   })
+}
+
+function getResults () {
+  const results = logs.map((log) => {
+    let row = []
+
+    Object.keys(log).forEach((key) => {
+      const val = log[key]
+      const index = columns.indexOf(key)
+      const rowValue = Array.isArray(val) ? val.join(' :: ') : val
+
+      row[index] = rowValue
+    })
+
+    return row.join(',')
+  })
+
+  results.unshift(columns.join(','))
+
+  return results.join('\n')
 }
