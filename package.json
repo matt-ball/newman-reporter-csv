@@ -1,0 +1,8 @@
+{
+  "name": "newman-reporter-csv",
+  "version": "0.0.1",
+  "description": "A CSV reporter for Newman.",
+  "main": "index.js",
+  "author": "Matt Ball",
+  "license": "MIT"
+}
