@@ -1,5 +1,5 @@
 let log
-let logs = []
+const logs = []
 const columns = [
   'iteration',
   'collectionName',
@@ -13,6 +13,12 @@ const columns = [
   'executed',
   'failed'
 ]
+
+const CSV = {
+  stringify: (str) => {
+    return `"${str.replace(/"/g, '""')}"`
+  }
+}
 
 /**
  * Reporter that outputs basic logs to CSV (default: newman-run-report.csv).
@@ -83,9 +89,11 @@ function getResults () {
     Object.keys(log).forEach((key) => {
       const val = log[key]
       const index = columns.indexOf(key)
-      const rowValue = Array.isArray(val) ? val.join(' :: ') : val
+      const rowValue = Array.isArray(val)
+        ? val.join(', ')
+        : String(val)
 
-      row[index] = rowValue
+      row[index] = CSV.stringify(rowValue)
     })
 
     return row.join(',')

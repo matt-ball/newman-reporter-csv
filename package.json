@@ -4,5 +4,8 @@
   "description": "A CSV reporter for Newman.",
   "main": "index.js",
   "author": "Matt Ball",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "standard": "^12.0.1"
+  }
 }
