@@ -5,6 +5,10 @@
   "main": "index.js",
   "author": "Matt Ball",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matt-ball/newman-reporter-csv.git"
+  },
   "devDependencies": {
     "standard": "^12.0.1"
   }
