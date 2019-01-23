@@ -1,5 +1,7 @@
 # Newman Reporter CSV
 
+Add CSV reports to your Newman runs.
+
 ## About
 
 Each request in a collection run maps to a row in the outputted CSV file with the following columns:
