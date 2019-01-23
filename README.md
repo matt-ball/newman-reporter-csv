@@ -11,7 +11,7 @@ Each request in a collection run maps to a row in the outputted CSV file with th
 | iteration | collection run iteration number | 1 |
 | collectionName | name of the collection | My fancy API |
 | requestName | name of the request made | Create user |
-| method | HTTP method of the request | GET |
+| method | HTTP method of the request | POST |
 | url | URL of the request | http://localhost:3000/user/create |
 | status | response status of the request | OK |
 | code | response code of the request | 200 |
