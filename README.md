@@ -19,6 +19,7 @@ Each request in a collection run maps to a row in the outputted CSV file with th
 | responseSize | size of the response (bytes) | 130 |
 | executed | tests that passed | Status was 200, User was created |
 | failed | tests that failed | User has view permissions |
+| skipped | tests that were skipped | User had first name Joe |
 > *Note: test names are comma separated*
 
 ## Setup

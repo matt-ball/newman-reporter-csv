@@ -11,7 +11,8 @@ const columns = [
   'responseTime',
   'responseSize',
   'executed',
-  'failed'
+  'failed',
+  'skipped'
 ]
 
 const CSV = {
@@ -56,7 +57,7 @@ module.exports = function newmanCSVReporter (newman, options) {
 
   newman.on('assertion', (err, e) => {
     const { assertion } = e
-    const key = err ? 'failed' : 'executed'
+    const key = err ? 'failed' : e.skipped ? 'skipped' : 'executed'
 
     log[key] = log[key] || []
     log[key].push(assertion)
