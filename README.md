@@ -2,6 +2,7 @@
 
 Add CSV reports to your Newman runs.
 
+
 ## About
 
 Each request in a collection run maps to a row in the outputted CSV file with the following columns:
@@ -20,6 +21,8 @@ Each request in a collection run maps to a row in the outputted CSV file with th
 | executed | tests that passed | Status was 200, User was created |
 | failed | tests that failed | User has view permissions |
 | skipped | tests that were skipped | User had first name Joe |
+| body | the raw response from request:response.text()  | {"raw":"data"} |
+
 > *Note: test names are comma separated*
 
 ## Setup
@@ -29,10 +32,24 @@ Ensure you have Newman setup first:
 npm install newman --save-dev
 ```
 
-Then install this package:
+Then install this (forked version), download and build local:
+
+
 
 ```console
 npm install newman-reporter-csv --save-dev
 ```
 
 You can then use the `-r csv` option to make Newman use the CSV reporter.
+
+
+## Options
+```console
+    reporter-csv-export  ./out (sets path of output CSV) 
+    reporter-csv-write-body=1  (includes response body in csv)
+ ```
+ 
+## Example 
+```console 
+newman run {the}.postman_collection.json   --reporter-csv-export .\out --reporter-csv-write-body 1    -r csv,cli  -e {the}.postman_environment.json  
+```
