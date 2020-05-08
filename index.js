@@ -4,7 +4,7 @@ const columns = [
   'iteration',
   'collectionName',
   'requestName',
-  'method',
+  'method', 
   'url',
   'status',
   'code',
@@ -12,7 +12,8 @@ const columns = [
   'responseSize',
   'executed',
   'failed',
-  'skipped'
+  'skipped',
+  'body'
 ]
 
 const CSV = {
@@ -25,7 +26,7 @@ const CSV = {
  * Reporter that outputs basic logs to CSV (default: newman-run-report.csv).
  *
  * @param {Object} newman - The collection run object, with event hooks for reporting run details.
- * @param {Object} options - A set of collection run options.
+ * @param {Object} options - A set of collection run options.  
  * @param {String} options.export - The path to which the summary object must be written.
  * @returns {*}
  */
@@ -41,7 +42,7 @@ module.exports = function newmanCSVReporter (newman, options) {
     const { cursor, item, request } = e
 
     Object.assign(log, {
-      collectionName: newman.summary.collection.name,
+      collectionName: newman.summary.collection.name, 
       iteration: cursor.iteration + 1,
       requestName: item.name,
       method: request.method,
@@ -52,7 +53,13 @@ module.exports = function newmanCSVReporter (newman, options) {
   newman.on('request', (err, e) => {
     if (err) return
     const { status, code, responseTime, responseSize } = e.response
-    Object.assign(log, { status, code, responseTime, responseSize })
+	const  body='' 
+	if (options.write-body===true)
+		body=e.response.text()
+		
+    Object.assign(log, { status, code, responseTime, responseSize, body })
+
+	  
   })
 
   newman.on('assertion', (err, e) => {
