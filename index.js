@@ -38,25 +38,24 @@ module.exports = function newmanCSVReporter (newman, options) {
   newman.on('beforeItem', (err, e) => {
     if (err) return
 
-    log = {
-      requestName: e.item.name
-    }
+    log = {}
   })
 
   newman.on('beforeRequest', (err, e) => {
-    if (err) return
-    const { cursor, request } = e
+    if (err || !e.item.name) return
+    const { cursor, item, request } = e
 
     Object.assign(log, {
       collectionName: newman.summary.collection.name,
       iteration: cursor.iteration + 1,
+      requestName: item.name,
       method: request.method,
       url: request.url.toString()
     })
   })
 
   newman.on('request', (err, e) => {
-    if (err) return
+    if (err || !e.item.name) return
     const { status, code, responseTime, responseSize, stream } = e.response
     Object.assign(log, { status, code, responseTime, responseSize })
 
