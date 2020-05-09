@@ -40,7 +40,7 @@ npm install newman-reporter-csv --save-dev
 You can then use the `-r csv` option to make Newman use the CSV reporter.
 
 ```console
-node_modules/bin/newman run postman_collection.json -e postman_environment.json -r csv
+node_modules/.bin/newman run postman_collection.json -e postman_environment.json -r csv
 ```
 
 ## Options
@@ -51,5 +51,5 @@ node_modules/bin/newman run postman_collection.json -e postman_environment.json 
 | --reporter-csv-includeBody | If you wish to save the response body for each request, use this option. |
 
 ```console
-node_modules/bin/newman run postman_collection.json -e postman_environment.json -r csv --reporter-csv-includeBody
+node_modules/.bin/newman run postman_collection.json -e postman_environment.json -r csv --reporter-csv-includeBody
 ```
