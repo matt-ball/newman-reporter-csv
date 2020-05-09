@@ -27,9 +27,14 @@ const CSV = {
  * @param {Object} newman - The collection run object, with event hooks for reporting run details.
  * @param {Object} options - A set of collection run options.
  * @param {String} options.export - The path to which the summary object must be written.
+ * @param {String} options.includeBody - Whether the response body should be included in each row.
  * @returns {*}
  */
 module.exports = function newmanCSVReporter (newman, options) {
+  if (options.includeBody) {
+    columns.push('body')
+  }
+
   newman.on('beforeItem', (err, e) => {
     if (err) return
 
@@ -37,7 +42,7 @@ module.exports = function newmanCSVReporter (newman, options) {
   })
 
   newman.on('beforeRequest', (err, e) => {
-    if (err) return
+    if (err || !e.item.name) return
     const { cursor, item, request } = e
 
     Object.assign(log, {
@@ -50,9 +55,13 @@ module.exports = function newmanCSVReporter (newman, options) {
   })
 
   newman.on('request', (err, e) => {
-    if (err) return
-    const { status, code, responseTime, responseSize } = e.response
+    if (err || !e.item.name) return
+    const { status, code, responseTime, responseSize, stream } = e.response
     Object.assign(log, { status, code, responseTime, responseSize })
+
+    if (options.includeBody) {
+      Object.assign(log, { body: stream.toString() })
+    }
   })
 
   newman.on('assertion', (err, e) => {
@@ -85,7 +94,7 @@ module.exports = function newmanCSVReporter (newman, options) {
 
 function getResults () {
   const results = logs.map((log) => {
-    let row = []
+    const row = []
 
     Object.keys(log).forEach((key) => {
       const val = log[key]
