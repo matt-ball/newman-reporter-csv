@@ -28,11 +28,15 @@ const CSV = {
  * @param {Object} options - A set of collection run options.
  * @param {String} options.export - The path to which the summary object must be written.
  * @param {String} options.includeBody - Whether the response body should be included in each row.
+ * @param {Array<String>} options.includeResponseHeaders - 
  * @returns {*}
  */
-module.exports = function newmanCSVReporter (newman, options) {
+module.exports = function newmanCSVReporter(newman, options) {
   if (options.includeBody) {
     columns.push('body')
+  }
+  if (options.includeResponseHeaders) {
+    options.includeResponseHeaders.split(",").forEach(v => columns.push(v));
   }
 
   newman.on('beforeItem', (err, e) => {
@@ -62,6 +66,19 @@ module.exports = function newmanCSVReporter (newman, options) {
     if (options.includeBody) {
       Object.assign(log, { body: stream.toString() })
     }
+    let headers = {};
+    const parsedResponse = JSON.parse(JSON.stringify(e.response))
+    if (parsedResponse.header) {
+      parsedResponse.header.reduce((previous, current) => { previous[current.key] = current.value; return previous; }, headers);
+    }
+
+    if (options.includeResponseHeaders) {
+      options.includeResponseHeaders.split(",").forEach(v => {
+        let obj = {}; obj[v] = headers[v];
+        Object.assign(log, obj)
+      });
+    }
+
   })
 
   newman.on('assertion', (err, e) => {
@@ -92,7 +109,7 @@ module.exports = function newmanCSVReporter (newman, options) {
   })
 }
 
-function getResults () {
+function getResults() {
   const results = logs.map((log) => {
     const row = []
 
