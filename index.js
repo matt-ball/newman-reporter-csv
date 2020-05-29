@@ -28,7 +28,7 @@ const CSV = {
  * @param {Object} options - A set of collection run options.
  * @param {String} options.export - The path to which the summary object must be written.
  * @param {String} options.includeBody - Whether the response body should be included in each row.
- * @param {Array<String>} options.includeResponseHeaders - 
+ * @param {Array<String>} options.includeResponseHeaders - List of response headers to be included in each row.
  * @returns {*}
  */
 module.exports = function newmanCSVReporter(newman, options) {
