@@ -88,7 +88,7 @@ module.exports = function newmanCSVReporter (newman, options) {
       content: getResults()
     })
 
-    console.log('CSV write complete!')
+    //console.log('CSV write complete!')
   })
 }
 
