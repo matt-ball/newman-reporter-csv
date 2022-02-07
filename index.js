@@ -10,13 +10,13 @@ const columns = [
   'code',
   'responseTime',
   'responseSize',
-  'totalAssertions',
-  'executedCount',
-  'failedCount',
-  'skippedCount',
   'executed',
   'failed',
-  'skipped'
+  'skipped',
+  'totalAssertions',
+  'passedCount',
+  'failedCount',
+  'skippedCount',
 ]
 
 
@@ -57,7 +57,7 @@ module.exports = function newmanCSVReporter (newman, options) {
       method: request.method,
       url: request.url.toString(),
       totalAssertions: 0,
-      executedCount: 0,
+      passedCount: 0,
       failedCount: 0,
       skippedCount: 0,
     })
@@ -81,7 +81,7 @@ module.exports = function newmanCSVReporter (newman, options) {
     log[key].push(assertion)
 
     log['totalAssertions']++
-    const assertionKey = (key == 'executed') ? 'executedCount' :
+    const assertionKey = (key == 'executed') ? 'passedCount' :
                         (key == 'skipped') ? 'skippedCount' : 'failedCount'
     log[assertionKey]++
   })
