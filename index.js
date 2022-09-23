@@ -19,7 +19,6 @@ const columns = [
   'skippedCount'
 ]
 
-
 const CSV = {
   stringify: (str) => {
     return `"${str.replace(/"/g, '""')}"`
