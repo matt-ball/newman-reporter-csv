@@ -17,11 +17,14 @@ Each request in a collection run maps to a row in the outputted CSV file with th
 | code | response code of the request | 200 |
 | responseTime | time taken to receive a response (ms) | 56 |
 | responseSize | size of the response (bytes) | 130 |
-| executed | tests that passed | Status was 200, User was created |
-| failed | tests that failed | User has view permissions |
-| skipped | tests that were skipped | User had first name Joe |
-| body | the response body | { foo: "bar" } |
-> *Note: test names are comma separated | `body` is optional, see [Options](#options)*
+| executed | test names that passed *(comma separated)* | Status was 200, User was created |
+| failed | test names that failed *(comma separated)* | User has view permissions |
+| skipped | test names that were skipped *(comma separated)* | User had first name Joe |
+| body | the response body *(optional column. see [Options](#options))* | { foo: "bar" } |
+| totalAssertions | Total number of test assertions on the request | 4 |
+| passedCount | Total number of test assertions that passed | 2 |
+| failedCount | Total number of test assertions that failed | 1 |
+| skippedCount | Total number of test assertions that were skipped | 1 |
 
 ## Setup
 Ensure you have Newman setup first:
