@@ -80,7 +80,7 @@ module.exports = function newmanCSVReporter (newman, options) {
     log[key] = log[key] || []
     log[key].push(assertion)
 
-    log['totalAssertions']++
+    log.totalAssertions++
     log[`${key}Count`]++
   })
 
