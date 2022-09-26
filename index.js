@@ -18,6 +18,7 @@ const columns = [
   'failedCount',
   'skippedCount'
 ]
+let today
 
 const CSV = {
   stringify: (str) => {
@@ -38,7 +39,14 @@ module.exports = function newmanCSVReporter (newman, options) {
   if (options.includeBody) {
     columns.push('body')
   }
-
+  
+  if(options.includeDate) {
+    columns.push('date')
+    const now = new Date
+    const utc_timestamp = Date.UTC(now.getFullYear(),now.getMonth(), now.getDate() , 
+    now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds())
+    today = new Date(utc_timestamp).toISOString()
+  }
   newman.on('beforeItem', (err, e) => {
     if (err) return
 
@@ -70,6 +78,11 @@ module.exports = function newmanCSVReporter (newman, options) {
     if (options.includeBody) {
       Object.assign(log, { body: stream.toString() })
     }
+    
+    if(options.includeDate){
+      Object.assign(log, {date: today})
+    }
+    
   })
 
   newman.on('assertion', (err, e) => {

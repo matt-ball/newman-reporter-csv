@@ -52,6 +52,7 @@ node_modules/.bin/newman run postman_collection.json -e postman_environment.json
 | ------ | ------ |
 | --reporter-csv-export <path> | Specify a path where the output CSV file will be written to disk. If not specified, the file will be written to `newman/` in the current working directory. |
 | --reporter-csv-includeBody | If you wish to save the response body for each request, use this option. |
+| --reporter-csv-includeDate | If you wish to save the UTC datetime in ISO format for each request, use this option. |
 
 ```console
 node_modules/.bin/newman run postman_collection.json -e postman_environment.json -r csv --reporter-csv-includeBody
